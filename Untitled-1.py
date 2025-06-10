@@ -33,7 +33,7 @@ class TiendaVirtual:
             print("Este usuario ya existe. ")
             return
        tipo = input("¿Es 'vendedor' o 'comprador'? ").lower()
-       if tipo not in ["vendedor" "comprador"]:
+       if tipo not in ["vendedor", "comprador"]:
             print("tipo no valido.")
             return
        self.usuarios[nombre] = Usuario(nombre, tipo)
