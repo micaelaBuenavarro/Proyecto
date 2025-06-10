@@ -25,27 +25,32 @@ class Producto:
 class TiendaVirtual:
     def __init__(self):
         self.productos = {} 
-        self.usuarios ={}
+        self.usuarios =[]
         
     def registrar_usuario(self):
        nombre = input("ingrese nombre de usuario: ")
-       if nombre in self.usuarios:
-            print("Este usuario ya existe. ")
-            return
+       for usuario in self.usuarios:
+           if nombre in self.usuarios:
+                print("Este usuario ya existe. ")
+                return
        tipo = input("¿Es 'vendedor' o 'comprador'? ").lower()
        if tipo not in ["vendedor", "comprador"]:
             print("tipo no valido.")
             return
-       self.usuarios[nombre] = Usuario(nombre, tipo)
+        
+       self.usuarios.append(Usuario(nombre, tipo))
        print(f"usuario '{nombre}' registrado como {tipo}.")
     
     def login(self):
         nombre =input("ingrese su nombre de usuario. ")
-        if nombre in self.usuarios:
-            return self.usuarios[nombre]
-        else:
-            print("usuario no encontrado.")
-            return None
+        
+        for usuario in self.usuarios:
+            if nombre == usuario.nombre:
+                return usuario
+            
+        
+        print("usuario no encontrado.")
+        return None
 
     def agregar_producto(self):
         nombre = input("Ingrese el nombre del producto: ")
@@ -53,9 +58,8 @@ class TiendaVirtual:
         costo_envase = float(input("Costo del envase: "))
         costo_etiqueta = float(input("Costo de etiqueta: "))
         margen = float(input("Margen de ganancia (%): "))
-        imagen_url = float (input("url de la imagen del producto: "))
     
-        producto = Producto(nombre, costo_insumo, costo_envase, costo_etiqueta, margen, imagen_url)
+        producto = Producto(nombre, costo_insumo, costo_envase, costo_etiqueta, margen)
         self.productos[nombre] = producto
     
         print(f"Producto '{nombre}' agregado con éxito.")
@@ -86,37 +90,38 @@ while True:
         tienda.registrar_usuario()
         
     elif opcion == "2":
-        Usuario = tienda.loing()
-        if Usuario:
-            if Usuario.tipo == "vendedor":
-                print("/n___Menú principal___")
-                print("1. agregar producto")
-                print("2. ver productos")
-                print("3. cerrar sesion")
-                op = input("opción: ")
-                
-                if op == "1":
-                    tienda.agregar_producto()
-                elif op == "2":
-                    tienda.mostrar_productos()
-                elif op == "3":
-                    break 
-                else:
-                    print("opcion inválida. ")
+        usuario = tienda.login()
+        if usuario:
+            if usuario.tipo == "vendedor":
+                while True:
+                    print("/n___Menú Productos___")
+                    print("1. agregar producto")
+                    print("2. ver productos")
+                    print("3. cerrar sesion")
+                    op = input("opción: ")
                     
-        elif Usuario.tipo == "comprador":
-            while True:
-                print("/n___Menu principal___")
-                print("1. ver productos")
-                print("2. cerrar sesion")
-                op = input("opcion: ")
+                    if op == "1":
+                        tienda.agregar_producto()
+                    elif op == "2":
+                        tienda.mostrar_productos()
+                    elif op == "3":
+                        break 
+                    else:
+                        print("opcion inválida. ")
                 
-                if op == "1":
-                    tienda.mostrar_productos8
-                elif op == "3":
-                    break 
-                else:
-                    print("opcion invalida. ")
+            elif usuario.tipo == "comprador":
+                while True:
+                    print("/n___Menu Productos___")
+                    print("1. ver productos")
+                    print("2. cerrar sesion")
+                    op = input("opcion: ")
+                
+                    if op == "1":
+                        tienda.mostrar_productos
+                    elif op == "2":
+                        break 
+                    else:
+                        print("opcion invalida. ")
     elif opcion == "3":
         break
     else:
