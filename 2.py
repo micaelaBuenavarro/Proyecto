@@ -164,7 +164,7 @@ def main():
                                 total += costo_envio
                             else:
                                 print("\nLo siento, no tengo información de esa localidad.")
-                                costo_envio = 0
+                                localidad_usuario = input("Por favor, ingresa una localidad válida: ").strip()
 
                             print(f"\nStock actualizado de productos:")
                             for producto in tienda.productos:
