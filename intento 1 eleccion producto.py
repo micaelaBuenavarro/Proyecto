@@ -116,26 +116,48 @@ def main():
                     
                         if op == "1":
                             tienda.mostrar_productos()
+                        
                         elif op == "2":
-                            for producto in tienda.productos:
-                                while True:
-                                    print(f"\nStock disponible de {producto.nombre}: {producto.stock} unidades")
-                                    try:
-                                        cantidad = input(f"\n¿Cuántos '{producto.nombre}' deseas comprar? (o '0' para omitir) ")
-                                        if cantidad == '0':
-                                            print(f"Se omite {producto.nombre}.")
-                                            break
-                                        cantidad = int(cantidad)
-                                        if cantidad < 0:
-                                            print("Por favor ingresa un número positivo.")
-                                        elif cantidad > producto.stock:
-                                            print(f"No hay suficiente stock de '{producto.nombre}'. Solo hay {producto.stock} unidades disponibles.")
-                                        else:
-                                            carrito[producto] = cantidad
-                                            break
-                                    except ValueError:
-                                        print("Por favor ingresa un número válido.")
+                            while True:
+                                tienda.mostrar_productos()
+                                if not tienda.productos:
+                                    break
 
+                                try:
+                                    eleccion = input("\nIngrese el número del producto que desea comprar (o '0' para finalizar): ")
+                                    if eleccion == '0':
+                                        break
+                                    eleccion = int(eleccion)
+                                    if eleccion < 1 or eleccion > len(tienda.productos):
+                                        print("Número inválido.")
+                                        continue
+
+                                    producto = tienda.productos[eleccion - 1]
+                                    print(f"Elegiste: {producto.nombre} (Stock: {producto.stock})")
+
+                                    cantidad = int(input(f"¿Cuántas unidades de '{producto.nombre}' deseas comprar? "))
+                                    if cantidad <= 0:
+                                        print("Cantidad inválida.")
+                                        continue
+                                    if cantidad > producto.stock:
+                                        print(f"No hay suficiente stock. Solo quedan {producto.stock} unidades.")
+                                        continue
+
+                                    if producto in carrito:
+                                        carrito[producto] += cantidad
+                                    else:
+                                        carrito[producto] = cantidad
+
+                                    print(f"{cantidad} unidad(es) de {producto.nombre} agregadas al carrito.")
+
+                                except ValueError:
+                                    print("Entrada inválida. Intenta nuevamente.")
+                            
+                            if not carrito:
+                                print("No se agregaron productos al carrito.")
+                                continue
+
+                            # Calcular total
                             for producto, cantidad in carrito.items():
                                 producto.stock -= cantidad
                                 precio_unitario = producto.calcular_precio()
@@ -143,7 +165,7 @@ def main():
                                 print(f"- {cantidad} x {producto.nombre} = ${subtotal:.2f}")
                                 total += subtotal
 
-                            # --- ENVÍO ---
+                            # Envío
                             tarifa_km = 50
                             distancias = {
                                 "San Rafael (Centro)": 0, "General Alvear": 90, "Malargüe": 189, "Tunuyán": 150,
@@ -165,36 +187,33 @@ def main():
                                 print(f"Costo estimado del envío: ${costo_envio:,} ARS")
                                 total += costo_envio
                             else:
-                                print("\nLo siento, no tengo información de esa localidad.")
-                                localidad_usuario = input("Por favor, ingresa una localidad válida: ").strip()
+                                print("Localidad no encontrada. El envío no será calculado.")
 
-                            print(f"\nStock actualizado de productos:")
+                            print("\nStock actualizado:")
                             for producto in tienda.productos:
                                 print(f"{producto.nombre}: {producto.stock} unidades")
 
                             print(f"\nTotal a pagar (incluye envío si corresponde): ${total:.2f}")
 
-                            # --- MÉTODO DE PAGO ---
+                            # Método de pago
                             while True:
                                 metodo_pago = input("\n¿Deseas pagar con 'efectivo' o 'transferencia'? ").strip().lower()
                                 if metodo_pago == "transferencia":
                                     print("\nPor favor realiza la transferencia al siguiente alias:")
                                     print("👉 alias.tienda.productos")
-                                    print("Una vez recibida la transferencia, se confirmará tu pago.")
                                     break
                                 elif metodo_pago == "efectivo":
                                     while True:
                                         try:
-                                            billete = float(input("\n¿Con qué billete vas a pagar? $"))
+                                            billete = float(input("¿Con qué billete vas a pagar? $"))
                                             if billete < total:
-                                                print("El billete no cubre el total, por favor ingresa uno mayor.")
+                                                print("El billete no cubre el total.")
                                             else:
                                                 vuelto = billete - total
-                                                print(f"\nRecibido: ${billete:.2f}")
-                                                print(f"Vuelto: ${vuelto:.2f}")
+                                                print(f"Recibido: ${billete:.2f} | Vuelto: ${vuelto:.2f}")
                                                 break
                                         except ValueError:
-                                            print("Por favor ingresa un monto válido.")
+                                            print("Monto inválido.")
                                     break
                                 else:
                                     print("Opción no válida. Escribí 'efectivo' o 'transferencia'.")
@@ -202,16 +221,11 @@ def main():
                             print("\n¡Gracias por tu compra!")
                             carrito = {}
                             total = 0
-                            
+
                         elif op == "3":
-                            break 
+                            break
                         else:
-                            print("opcion invalida. ")
-        elif opcion == "3":
-            print("CHAU")
-            break
-        else:
-            print("opcion invalida.")   
+                            print("opcion invalida.")  
          
 if __name__ == "__main__":
     main()

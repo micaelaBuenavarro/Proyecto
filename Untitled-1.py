@@ -4,6 +4,7 @@ class Usuario:
         self.tipo = tipo 
 
 class Producto: 
+    
     def __init__(self, nombre, costo_insumo, costo_envase, costo_etiqueta, margen_ganancia):
         self.nombre = nombre
         self.costo_insumo = costo_insumo 
@@ -23,6 +24,7 @@ class Producto:
         
 
 class TiendaVirtual:
+    
     def __init__(self):
         self.productos = {} 
         self.usuarios =[]
@@ -84,7 +86,7 @@ while True:
     print("1. registrar usuario")
     print("2. iniciar sesión")
     print("3. salir")
-    opcion = input ("ingrese su opción")
+    opcion = input ("ingrese su opción: ")
     
     if opcion == "1":
         tienda.registrar_usuario()
@@ -117,12 +119,13 @@ while True:
                     op = input("opcion: ")
                 
                     if op == "1":
-                        tienda.mostrar_productos
+                        tienda.mostrar_productos()
                     elif op == "2":
                         break 
                     else:
                         print("opcion invalida. ")
     elif opcion == "3":
+        print("CHAU")
         break
     else:
         print("opcion invalida.")   
